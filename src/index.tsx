@@ -8,6 +8,9 @@ import { router } from "./router";
 import reset from "styled-reset";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { theme } from "./theme";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -16,6 +19,7 @@ const GlobalStyle = createGlobalStyle`
   }
   body * {
     color: #e5e5e5;
+    box-sizing: border-box;
   }
 `;
 
@@ -24,9 +28,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <GlobalStyle />
-    <ThemeProvider theme={theme} />
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <GlobalStyle />
+      <ThemeProvider theme={theme} />
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

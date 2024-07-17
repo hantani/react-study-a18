@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 const Wrapper = styled.div`
   padding-top: 50px;
   margin: 0 auto;
-  width: 800px;
+  width: 450px;
   display: flex;
   justify-content: space-between;
 
