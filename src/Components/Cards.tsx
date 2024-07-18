@@ -1,8 +1,8 @@
-import { useState } from "react";
 import styled from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { useNavigate, useLocation } from "react-router-dom";
 
-interface IMovie {
+export interface IMovie {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
@@ -31,7 +31,7 @@ const Card = styled(motion.li)`
   width: 200px;
   cursor: pointer;
 `;
-const Img = styled.img`
+const Img = styled(motion.img)`
   width: 100%;
   height: 300px;
   border-radius: 10px;
@@ -41,52 +41,7 @@ const Heading = styled.p`
   text-align: center;
   line-height: 1.5;
   margin-top: 15px;
-`;
-const Overlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-`;
-const Modal = styled(motion.div)`
-  width: 680px;
-  min-height: 400px;
-  background-color: #141414;
-  border-radius: 15px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-const ModalImgWrapper = styled.div`
-  height: 400px;
-
-  &::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 400px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: linear-gradient(0deg, #181818, transparent 20%);
-  }
-`;
-const ModalImg = styled.img`
-  display: block;
-  width: 100%;
-  height: 399px;
-  position: relative;
-  border-radius: 15px 15px 0 0;
-`;
-const ModalTitle = styled.h2`
-  font-size: 26px;
-  line-height: 1.5;
-`;
-const TextWrapper = styled.div`
-  padding: 20px;
+  pointer-events: none;
 `;
 
 const container = {
@@ -107,58 +62,29 @@ const item = {
 };
 
 function Cards({ movies }: { movies: IMovie[] }) {
-  const [selectedMovie, setSelectedMovie] = useState<IMovie>();
-  const [modal, setModal] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
   const onCardClick = (movieId: number) => {
-    setModal(true);
-    movies.forEach((movie) => {
-      if (movieId === movie.id) {
-        setSelectedMovie(movie);
-      }
-    });
+    if (location.pathname === "/") {
+      navigate(`/movies/${movieId}`);
+    } else {
+      navigate(`${location.pathname}/movies/${movieId}`);
+    }
   };
-  const onOverlayClick = () => {
-    setModal(false);
-  };
-  console.log(movies[0]);
 
   return (
     <>
       <CardLists variants={container} initial="hidden" animate="visible">
         {movies.map((movie: IMovie) => (
-          <Card
-            key={movie.id}
-            variants={item}
-            onClick={() => onCardClick(movie.id)}
-          >
+          <Card key={movie.id} onClick={() => onCardClick(movie.id)}>
             <Img
+              whileHover={{ scale: 1.05, y: -15 }}
               src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
             ></Img>
             <Heading>{movie.title}</Heading>
           </Card>
         ))}
       </CardLists>
-      <AnimatePresence>
-        {modal && (
-          <>
-            <Overlay
-              onClick={onOverlayClick}
-              exit={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            />
-            <Modal exit={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <ModalImgWrapper>
-                <ModalImg
-                  src={`https://image.tmdb.org/t/p/original${selectedMovie?.backdrop_path}`}
-                />
-              </ModalImgWrapper>
-              <TextWrapper>
-                <ModalTitle>{selectedMovie?.title}</ModalTitle>
-              </TextWrapper>
-            </Modal>
-          </>
-        )}
-      </AnimatePresence>
     </>
   );
 }

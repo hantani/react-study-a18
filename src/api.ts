@@ -6,3 +6,11 @@ const BASE_PATH = "https://api.themoviedb.org/3/movie/";
 export const getPopularMovies = async () => {
   return await axios.get(`${BASE_PATH}popular?api_key=${API_KEY}`);
 };
+
+export const getUpcomingMovies = async () => {
+  return await axios.get(`${BASE_PATH}upcoming?api_key=${API_KEY}`);
+};
+
+export const getNowPlayingMovies = async () => {
+  return await axios.get(`${BASE_PATH}now_playing?api_key=${API_KEY}`);
+};
