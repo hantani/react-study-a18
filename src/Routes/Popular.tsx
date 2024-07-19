@@ -11,8 +11,6 @@ function Popular() {
   });
   const popularMovieMatch = useMatch("/movies/:movieId");
 
-  console.log(json?.data.results[0]);
-
   return (
     <>
       {isLoading ? (
