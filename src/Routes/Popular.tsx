@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getPopularMovies } from "../api";
 import Loading from "../Components/Loading";
 import Cards from "../Components/Cards";
-import ModalComponent from "../Components/ModalComponent";
 import { useMatch } from "react-router-dom";
 
 function Popular() {
@@ -19,13 +18,7 @@ function Popular() {
       {isLoading ? (
         <Loading />
       ) : (
-        <>
-          <Cards movies={json?.data.results} />
-          <ModalComponent
-            movies={json?.data.results}
-            match={popularMovieMatch}
-          />
-        </>
+        <Cards movies={json?.data.results} match={popularMovieMatch} />
       )}
     </>
   );

@@ -4,6 +4,7 @@ import { IMovie } from "./Cards";
 import { PathMatch } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { transform } from "typescript";
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -22,6 +23,7 @@ const Modal = styled(motion.div)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  transform-origin: left right;
 `;
 const ModalImgWrapper = styled.div`
   height: 400px;
@@ -69,6 +71,16 @@ const CloseBtn = styled.button`
   cursor: pointer;
 `;
 
+const overlayVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+};
+
+const modalVariants = {
+  initial: { scale: 0 },
+  animate: { scale: 1 },
+};
+
 function ModalComponent({
   movies,
   match,
@@ -89,11 +101,12 @@ function ModalComponent({
       {match ? (
         <>
           <Overlay
-            exit={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            variants={overlayVariants}
+            initial="initial"
+            animate="animate"
             onClick={onOverlayClick}
           />
-          <Modal exit={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <Modal variants={modalVariants} initial="initial" animate="animate">
             <ModalImgWrapper>
               <ModalImg
                 src={`https://image.tmdb.org/t/p/original${movie?.backdrop_path}`}
